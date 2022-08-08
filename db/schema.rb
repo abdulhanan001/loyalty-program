@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_08_070023) do
+ActiveRecord::Schema.define(version: 2022_08_08_074130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "loyalty_tiers", force: :cascade do |t|
+    t.integer "points_required"
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "monthly_points", force: :cascade do |t|
     t.bigint "user_id"
@@ -45,7 +52,9 @@ ActiveRecord::Schema.define(version: 2022_08_08_070023) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "loyalty_tier_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["loyalty_tier_id"], name: "index_users_on_loyalty_tier_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
