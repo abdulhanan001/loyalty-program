@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_08_062636) do
+ActiveRecord::Schema.define(version: 2022_08_08_070023) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "monthly_points", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "points", default: 0
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_monthly_points_on_user_id"
+  end
 
   create_table "transactions", force: :cascade do |t|
-    t.integer "user_id"
+    t.bigint "user_id"
     t.integer "leftover_spent_in_cents"
     t.integer "total_spent_in_cents"
     t.string "country"
