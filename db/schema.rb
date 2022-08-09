@@ -15,13 +15,13 @@ ActiveRecord::Schema.define(version: 2022_08_09_112857) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "leftover_transaction_spendings", force: :cascade do |t|
+  create_table "leftover_spendings", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "local_spent_in_cents", default: 0
     t.integer "overseas_spent_in_cents", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_leftover_transaction_spendings_on_user_id"
+    t.index ["user_id"], name: "index_leftover_spendings_on_user_id"
   end
 
   create_table "loyalty_tiers", force: :cascade do |t|

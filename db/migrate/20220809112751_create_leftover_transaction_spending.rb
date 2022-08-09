@@ -1,6 +1,6 @@
 class CreateLeftoverTransactionSpending < ActiveRecord::Migration[6.1]
   def change
-    create_table :leftover_transaction_spendings do |t|
+    create_table :leftover_spendings do |t|
 
       t.references :user, index: true
       t.integer :local_spent_in_cents, default: 0
