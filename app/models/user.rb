@@ -4,7 +4,9 @@ class User < ApplicationRecord
   has_many :user_rewards
   has_many :rewards, through: :user_rewards, source: :reward
   has_many :monthly_points
+  has_many :transactions
   has_one :leftover_spending
+
 
 
   belongs_to :loyalty_tier
