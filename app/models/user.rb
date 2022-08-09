@@ -4,16 +4,19 @@ class User < ApplicationRecord
   has_many :user_rewards
   has_many :rewards, through: :user_rewards, source: :reward
   has_many :monthly_points
+  has_many :transactions
   has_one :leftover_spending
 
 
   belongs_to :loyalty_tier
+  after_save :claim_reward, if: :saved_change_to_loyalty_tier_id?
 
   before_validation :set_standard_loyalty_tier, on: :create
   after_create :create_monthly_point, :create_leftover_spending
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
   # validates_inclusion_of :country, in: Country.all
+
   validates_presence_of :name, :email
 
   def create_monthly_point
@@ -41,11 +44,16 @@ class User < ApplicationRecord
     ::LoyaltyTier::POINTS_NEEDED.keys.each do |tier|
       if can_upgrade_loyalty_tier(tier, points)
         qualified_tier = LoyaltyTier.find_by(name: tier)
+        next unless qualified_tier
         self.loyalty_tier = qualified_tier
         self.save
         break
       end
     end
+  end
+
+  def claim_reward
+    ::RewardTrigger::ByLoyaltyTier.new(self)
   end
 
   def can_upgrade_loyalty_tier(tier, points)

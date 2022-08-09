@@ -8,7 +8,7 @@ class MonthlyPoint < ApplicationRecord
 
   validates_numericality_of :points, allow_nil: false
   validates_presence_of :start_date, :end_date
-  validates_uniqueness_of :user_id, scope: %i[start_date end_date]
+  # validates_uniqueness_of :user_id, scope: %i[start_date end_date]
 
   scope :for_year, lambda { |date|
     where(created_at: date.beginning_of_year..date.end_of_year)
