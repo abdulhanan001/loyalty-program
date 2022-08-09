@@ -3,11 +3,16 @@
 class MonthlyPoint < ApplicationRecord
   belongs_to :user
 
+  after_save :claim_reward
   before_validation :initialize_start_and_end_dates, on: :create
 
   validates_numericality_of :points, allow_nil: false
   validates_presence_of :start_date, :end_date
   validates_uniqueness_of :user_id, scope: %i[start_date end_date]
+
+  def claim_reward
+    ::RewardTrigger::ByPoints.new(self)
+  end
 
   def initialize_start_and_end_dates
     today = Date.today
@@ -18,5 +23,5 @@ class MonthlyPoint < ApplicationRecord
   def update_points(earned_points)
     self.points += earned_points
     self.save
-  en
+  end
 end
