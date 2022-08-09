@@ -32,4 +32,25 @@ class User < ApplicationRecord
   def create_leftover_spending
     LeftoverSpending.create!(user_id: id)
   end
+
+  def current_year_points
+    date = Date.today
+    monthly_points.for_year(date).pluck(:points).sum
+  end
+
+  def upgrade_loyalty_tier(points=current_year_points)
+    ::LoyaltyTier::POINTS_NEEDED.keys.each do |tier|
+      if can_upgrade_loyalty_tier(tier, points)
+        qualified_tier = LoyaltyTier.find_by(name: tier)
+        self.loyalty_tier = qualified_tier
+        self.save
+        break
+      end
+    end
+  end
+
+  def can_upgrade_loyalty_tier(tier, points)
+    points >= ::LoyaltyTier::POINTS_NEEDED[tier] &&
+      loyalty_tier.name != tier
+  end
 end
