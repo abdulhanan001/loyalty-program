@@ -24,8 +24,10 @@ gem 'jbuilder', '~> 2.7'
 gem 'countries', require: 'countries/global'
 gem 'devise'
 gem 'factory_bot_rails'
+gem 'faker'
 gem 'pg'
 gem 'rspec-rails'
+gem 'shoulda-matchers'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
