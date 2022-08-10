@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_08_074130) do
+ActiveRecord::Schema.define(version: 2022_08_08_075422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(version: 2022_08_08_074130) do
     t.index ["user_id"], name: "index_monthly_points_on_user_id"
   end
 
+  create_table "rewards", force: :cascade do |t|
+    t.string "name"
+    t.string "criteria"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "transactions", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "leftover_spent_in_cents"
@@ -40,6 +47,17 @@ ActiveRecord::Schema.define(version: 2022_08_08_074130) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
+
+  create_table "user_rewards", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "reward_id"
+    t.string "identifier"
+    t.boolean "redeemed", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["reward_id"], name: "index_user_rewards_on_reward_id"
+    t.index ["user_id"], name: "index_user_rewards_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

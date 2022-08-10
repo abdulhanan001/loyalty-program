@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  has_many :user_rewards
+  has_many :rewards, through: :user_rewards, source: :reward
   has_many :monthly_points
+
+
   belongs_to :loyalty_tier
 
   before_validation :set_standard_loyalty_tier, on: :create
