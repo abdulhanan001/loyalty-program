@@ -1,9 +1,7 @@
 class Transaction < ApplicationRecord
   belongs_to :user
-
   after_save :update_monthtly_points_and_leftover_spend, :claim_reward
 
-  validates_inclusion_of :country, in: Country.all
   validates_numericality_of :total_spent_in_cents, allow_nil: false
 
   scope :for_date_range, lambda { |start_date, end_date|
@@ -15,10 +13,6 @@ class Transaction < ApplicationRecord
       update_user_monthly_points
       update_user_leftover_spending
     end
-  end
-
-  def claim_reward
-    ::RewardTrigger::ByTransactions.new(user, self)
   end
 
   def update_user_leftover_spending
@@ -34,10 +28,6 @@ class Transaction < ApplicationRecord
     user.leftover_spending.update_monthly_points_and_leftover_spend
   end
 
-  def calculate_points_earned
-    (total_spent_in_cents % POINTS_REWARD[:spent_required]).floor * POINTS_REWARD[:points_earned]
-  end
-
   def update_user_monthly_points
     total_points_earned = CalculatePoints.points_earned(total_spent_in_cents)
     return if total_points_earned.zero?
@@ -48,5 +38,9 @@ class Transaction < ApplicationRecord
 
   def overseas?
     user.country != country
+  end
+
+  def claim_reward
+    ::RewardTrigger::ByTransactions.new(user, self)
   end
 end

@@ -50,6 +50,13 @@ describe User, type: :model do
         create :loyalty_tier, :platinum
       end
 
+      describe "when user has more than 1000 points" do
+        it "upgrades user to gold tier member" do
+          expect(user.loyalty_tier.name).to eq "Standard"
+          user.upgrade_loyalty_tier(1000)
+          expect(user.loyalty_tier.name).to eq "Gold"
+        end
+      end
 
       describe "when user has more than 5000 points" do
         it "upgrades user to platinum tier member" do

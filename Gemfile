@@ -28,6 +28,7 @@ gem 'faker'
 gem 'pg'
 gem 'rspec-rails'
 gem 'shoulda-matchers'
+gem 'timecop'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

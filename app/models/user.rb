@@ -19,7 +19,7 @@ class User < ApplicationRecord
   validates_presence_of :name, :email
 
   def set_standard_loyalty_tier
-    self.loyalty_tier = LoyaltyTier.find_by(name: I18n.t('loyalty_tier.name.standard'))
+    self.loyalty_tier = LoyaltyTier.find_by(name: I18n.t("loyalty_tier.name.standard"))
   end
 
   def create_monthly_point
@@ -46,7 +46,6 @@ class User < ApplicationRecord
       if can_upgrade_loyalty_tier(tier, points)
         qualified_tier = LoyaltyTier.find_by(name: tier)
         next unless qualified_tier
-
         self.loyalty_tier = qualified_tier
         self.save
         break
